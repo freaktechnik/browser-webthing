@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Browser as WebThing</title>
+        <script src="main.js"></script>
+    </head>
+    <body>
+        <form>
+            <section>
+                <label for="name">Name</label>
+                <input type="text" id="name" placeholder="Name your browser">
+            </section>
+            <section>
+                <label for="notify">Allow notifications to be triggered</label>
+                <input type="checkbox" id="notify">
+            </section>
+            <section>
+                <label for="vibrate">Allow device to be vibrated</label>
+                <input type="checkbox" id="vibrate">
+            </section>
+            <button type="button" id="start">Start</button>
+        </form>
+        <section id="running" hidden>
+            <a id="url">WebThing Endpoint</a>
+            <button id="stop" type="button" disabled>Stop</button>
+        </section>
+    </body>
+</html>

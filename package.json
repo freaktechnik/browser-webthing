@@ -1,0 +1,22 @@
+{
+  "name": "browser-webthing",
+  "version": "1.0.0",
+  "description": "Expose your browser as webthing.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "keywords": [
+    "mozilla-iot",
+    "webthing",
+    "wot"
+  ],
+  "author": "Martin Giger (https://humanoids.be)",
+  "license": "MIT",
+  "dependencies": {
+    "internal-ip": "^4.3.0",
+    "uuid": "^3.3.2",
+    "webthing": "^0.11.0"
+  }
+}
