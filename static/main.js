@@ -2,7 +2,7 @@ const SENSOR_PERMISSIONS = {
     // accelerometer: 'Accelerometer',
     'ambient-light-sensor': 'AmbientLightSensor',
     // gyroscope: 'Gyroscope',
-    // magnetometer: 'Magnetometer',
+    // magnetometer: 'Magnetometer', and UncalibratedMagnetometer
     'proximity-sensor': 'ProximitySensor'
 };
 
@@ -12,7 +12,7 @@ const SENSOR_PROP = {
 };
 
 const getSensors = async () => {
-    let sensors = [];
+    const sensors = [];
     for(const [permission, constructor] of Object.entries(SENSOR_PERMISSIONS)) {
         try {
             const hasPermission = await navigator.permissions.query({ name: permission });

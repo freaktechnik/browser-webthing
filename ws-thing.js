@@ -1,9 +1,18 @@
+"use strict";
+
 const { Thing, Property, Value, Action } = require("webthing");
-const uuid = require("uuid/v4");
+const { v4: uuid } = require("uuid");
+
+const SENSOR_UNIT = {
+    AmbientLightSensor: 'lux',
+    ProximitySensor: 'cm',
+    Gyroscope: 'rad/s',
+    Accelerometer: 'm/s²'
+};
 
 class NotifyAction extends Action {
     /**
-     * 
+     *
      * @param {WebSocketThing} thing
      * @param {string} input
      */
@@ -11,9 +20,6 @@ class NotifyAction extends Action {
         super(uuid(), thing, 'notify', input);
     }
 
-    /**
-     * @returns {Promise<any>}
-     */
     performAction() {
         this.thing.send({
             type: 'notify',
@@ -25,7 +31,7 @@ class NotifyAction extends Action {
 
 class VibrateAction extends Action {
     /**
-     * 
+     *
      * @param {WebSocketThing} thing
      * @param {number} input
      */
@@ -33,9 +39,6 @@ class VibrateAction extends Action {
         super(uuid(), thing, 'vibrate', input);
     }
 
-    /**
-     * @returns {Promise<any>}
-     */
     performAction() {
         this.thing.send({
             type: 'vibrate',
@@ -47,16 +50,17 @@ class VibrateAction extends Action {
 
 module.exports = class WebSocketThing extends Thing {
     constructor(websocket, spec) {
-        super(spec.name, [], 'A web browser');
+        super(spec.id || uuid(), spec.name, [], 'A web browser');
 
         this.ws = websocket;
         this.setUiHref('/static');
+        this.setHrefPrefix(`/${this.id}`);
 
         for(const sensor of spec.sensors) {
             this.addSensor(sensor);
         }
 
-        this.addProperty(new Property(this, 'visibile', new Value(!spec.hidden), {
+        this.addProperty(new Property(this, 'visible', new Value(!spec.hidden), {
             readOnly: true,
             type: 'boolean',
             title: 'Page visible'
@@ -82,28 +86,41 @@ module.exports = class WebSocketThing extends Thing {
         }
     }
 
+    /**
+     * Called when the thing was made available in the server.
+     * @param {string} host - Host the thing is available at.
+     */
+    registered(host) {
+        this.send({
+            type: 'created',
+            url: `http://${host}/${this.id}`,
+            id: this.id
+        });
+    }
+
     addSensor(sensor) {
         const desc = {
             readOnly: true,
             type: 'number',
-            title: sensor.type
+            title: sensor.type,
+            unit: SENSOR_UNIT[sensor.type]
         };
         this.addProperty(new Property(this, sensor.type, new Value(sensor.value), desc));
     }
 
     updateSensor(sensor) {
-        const prop = this.findProperty(sensor.type);
-        if(prop) {
-            prop.setValue(sensor.value);
+        const property = this.findProperty(sensor.type);
+        if(property) {
+            property.value.notifyOfExternalUpdate(sensor.value);
         }
     }
 
     /**
-     * 
+     *
      * @param {boolean} hidden
      */
     updateVisibility(hidden) {
-        this.findProperty('visible').setValue(!hidden);
+        this.findProperty('visible').value.notifyOfExternalUpdate(!hidden);
     }
 
     /**

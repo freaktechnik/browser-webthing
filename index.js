@@ -1,3 +1,5 @@
+"use strict";
+
 const { DynamicMultipleThings } = require("./dynamic-server");
 const { WebThingServer } = require("webthing");
 const WebSocketThing = require("./ws-thing");
@@ -26,12 +28,8 @@ internalIp.v4().then((ip) => {
             switch(message.type) {
                 case 'create':
                     thing = new WebSocketThing(ws, message);
-                    id = things.register(thing, message.id || undefined);
-                    thing.send({
-                        type: 'created',
-                        url: `http://${ip}:${PORT}/${id}`,
-                        id
-                    });
+                    things.register(thing, thing.id);
+                    thing.registered(`${ip}:${PORT}`);
                     break;
                 case 'update':
                     for(const sensor of message.sensors) {

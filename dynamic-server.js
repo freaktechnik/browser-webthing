@@ -1,46 +1,47 @@
-const uuid = require("uuid/v4");
+"use strict";
 
-exports.DynamicMultipleThings = class MultipleThings {
+const { MultipleThings } = require('webthing');
+
+exports.DynamicMultipleThings = class DynamicMultipleThings extends MultipleThings {
     /**
-     * 
+     *
      * @param {string} name
      */
     constructor(name) {
-        this.name = name;
+        super([], name);
         this.things = new Map();
     }
 
     /**
-     * 
-     * @param {string} idx
+     *
+     * @param {string} [index]
      * @return {WebSocketThing}
      */
-    getThing(idx) {
-        return this.things.get(idx);
+    getThing(index) {
+        if(this.things.has(index)) {
+            return this.things.get(index);
+        }
+        if(Number.isInteger(index)) {
+            return Array.from(this.things.values())[index];
+        }
+        return null;
     }
 
     getThings() {
         return Array.from(this.things.values());
     }
 
-    getName() {
-        return this.name;
-    }
-
     /**
-     * 
+     *
      * @param {WebSocketThing} thing
-     * @param {string} [id=uuid]
-     * @return {string}
+     * @param {string} id
      */
-    register(thing, id = uuid()) {
+    register(thing, id) {
         this.things.set(id, thing);
-        thing.setHrefPrefix(`/${id}`);
-        return id;
     }
 
     /**
-     * 
+     *
      * @param {WebSocketThing} thing
      */
     unregister(thing) {
