@@ -1,7 +1,5 @@
-"use strict";
-
-const { Thing, Property, Value, Action } = require("webthing");
-const { v4: uuid } = require("uuid");
+import { Thing, Property, Value, Action } from "webthing";
+import { v4 as uuid } from "uuid";
 
 const SENSOR_UNIT = {
     AmbientLightSensor: 'lux',
@@ -48,7 +46,7 @@ class VibrateAction extends Action {
     }
 }
 
-module.exports = class WebSocketThing extends Thing {
+export default class WebSocketThing extends Thing {
     constructor(websocket, spec) {
         super(spec.id || uuid(), spec.name, [], 'A web browser');
 
@@ -129,4 +127,4 @@ module.exports = class WebSocketThing extends Thing {
     send(msg) {
         this.ws.send(JSON.stringify(msg));
     }
-};
+}

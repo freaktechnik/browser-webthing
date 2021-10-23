@@ -1,20 +1,17 @@
-"use strict";
-
-const { DynamicMultipleThings } = require("./dynamic-server");
-const { WebThingServer } = require("webthing");
-const WebSocketThing = require("./ws-thing");
-const express = require("express");
-const path = require("path");
-const internalIp = require("internal-ip");
+import { DynamicMultipleThings } from "./dynamic-server.js";
+import { WebThingServer } from "webthing";
+import WebSocketThing from "./ws-thing.js";
+import express from "express";
+import { internalIpV4 } from "internal-ip";
 
 const PORT = 8080;
 
-internalIp.v4().then((ip) => {
+internalIpV4().then((ip) => {
     const things = new DynamicMultipleThings('browser-things');
     const server = new WebThingServer(things, PORT, ip, undefined, [
         {
             path: '/static',
-            handler: express.static(path.join(__dirname, 'static'))
+            handler: express.static(new URL('./static', import.meta.url).pathname)
         },
     ]);
 

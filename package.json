@@ -15,8 +15,12 @@
   "author": "Martin Giger (https://humanoids.be)",
   "license": "MIT",
   "dependencies": {
-    "internal-ip": "^6.2.0",
+    "internal-ip": "^7.0.0",
     "uuid": "^8.3.2",
     "webthing": "^0.15.0"
-  }
+  },
+  "engines": {
+    "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
+  },
+  "type": "module"
 }

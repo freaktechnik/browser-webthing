@@ -1,8 +1,6 @@
-"use strict";
+import { MultipleThings } from 'webthing';
 
-const { MultipleThings } = require('webthing');
-
-exports.DynamicMultipleThings = class DynamicMultipleThings extends MultipleThings {
+export class DynamicMultipleThings extends MultipleThings {
     /**
      *
      * @param {string} name
@@ -50,4 +48,4 @@ exports.DynamicMultipleThings = class DynamicMultipleThings extends MultipleThin
             this.things.delete(entry[0])
         }
     }
-};
+}
