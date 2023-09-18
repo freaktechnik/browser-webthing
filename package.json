@@ -16,7 +16,7 @@
   "license": "MIT",
   "dependencies": {
     "internal-ip": "^8.0.0",
-    "uuid": "^9.0.0",
+    "uuid": "^9.0.1",
     "webthing": "^0.15.0"
   },
   "engines": {
